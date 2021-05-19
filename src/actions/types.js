@@ -1,0 +1,7 @@
+export const SHOW_PROGRESS = 'SHOW_PROGRESS';
+export const HIDE_PROGRESS = 'HIDE_PROGRESS';
+
+export const SET_USERDATA = 'SET_USERDATA';
+export const SET_USERNAME = 'SET_USERNAME';
+export const SET_PHONENUMBER = 'SET_PHONENUMBER';
+export const AUTH_SIGNOUT = 'AUTH_SIGNOUT';

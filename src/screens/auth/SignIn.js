@@ -46,7 +46,7 @@ class SignUp extends Component {
 
   onSignIn = () => {
     const { phoneNumber, password } = this.state;
-    const isValidPhone = this.phoneInput.current?.isValidNumber(phoneNumber)
+    const isValidPhone = this.phoneRef?.isValidNumber(phoneNumber)
     const isValidPwd = password.length >= MIN_PASSWORD_LEN;
     this.setState({ isValidPhone, isValidPwd });
 
@@ -77,7 +77,7 @@ class SignUp extends Component {
                   <Label style={{ color: '#7d8c96' }}>Phone Number</Label>
                   <PhoneInput
                     placeholder=" "
-                    ref={phoneInput => { this.phoneInput = phoneInput }}
+                    ref={ref => { this.phoneRef = ref }}
                     defaultValue={phoneNumber}
                     defaultCode="FR"
                     layout="first"

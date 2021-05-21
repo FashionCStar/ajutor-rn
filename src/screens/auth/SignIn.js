@@ -17,17 +17,17 @@ const { width, height } = Dimensions.get('window');
 class SignUp extends Component {
   state = {
     email: '',
-    isValidEmail: true,
+    isValidPhone: true,
     password: '',
     isValidPwd: true,
     phoneNumber: "",
     showPwd: false
   };
 
-  onChangeEmail = (email) => {
+  onChangePhone = (phoneNumber) => {
     this.setState({
-      email,
-      isValidEmail: true
+      phoneNumber,
+      isValidPhone: true
     });
   }
 
@@ -45,16 +45,21 @@ class SignUp extends Component {
   }
 
   onSignIn = () => {
-    const { email, password } = this.state;
-    const isValidEmail = validateEmail(email);
+    const { phoneNumber, password } = this.state;
+    const isValidPhone = this.phoneInput.current?.isValidNumber(phoneNumber)
     const isValidPwd = password.length >= MIN_PASSWORD_LEN;
-    this.setState({ isValidEmail, isValidPwd });
+    this.setState({ isValidPhone, isValidPwd });
 
-    if (!isValidEmail || !isValidPwd) return;
+    if (!isValidPhone || !isValidPwd) return;
 
-    this.props.signInWithEmail({ email, password });
+    console.log('isVAlidddddddddd', isValidPhone)
+    // this.props.signInWithEmail({ phoneNumber, password });
   }
 
+  goToSignUp = () => {
+    const { navigation } = this.props;
+    navigation.navigate('SignUp');
+  }
   onTerms = () => { }
 
   render() {
@@ -81,7 +86,7 @@ class SignUp extends Component {
                     }}
                     onChangeFormattedText={(text) => {
                       console.log('ddddddddddddd', text)
-                      this.setState({ phoneNumber: text })
+                      this.onChangePhone(text);
                     }}
                     // autoFocus
                     containerStyle={{ backgroundColor: 'transparent', width: '100%' }}
@@ -105,7 +110,7 @@ class SignUp extends Component {
                   </Item>
                 </View>
                 <View style={{ marginTop: 10 }}>
-                  <Button style={{ width: '100%', height: 60, justifyContent: 'center', backgroundColor: '#584fea' }}>
+                  <Button style={{ width: '100%', height: 60, justifyContent: 'center', backgroundColor: '#584fea' }} onPress={this.onSignIn}>
                     <Text style={{ fontSize: 20 }}>LOGIN</Text>
                   </Button>
                 </View>
@@ -123,7 +128,10 @@ class SignUp extends Component {
               </View>
               <Center>
                 <Text style={{ marginTop: 30 }}>Not registered yet?</Text>
-                <Button style={{ marginTop: 20, width: '100%', height: 50, backgroundColor: '#584fea' }}>
+                <Button
+                  style={{ marginTop: 20, width: '100%', height: 50, backgroundColor: '#584fea' }}
+                  onPress={this.goToSignUp}
+                >
                   <Text style={{ fontSize: 20 }}>REGISTER FOR FREE</Text>
                 </Button>
                 <TouchableOpacity>

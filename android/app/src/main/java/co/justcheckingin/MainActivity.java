@@ -1,4 +1,4 @@
-package co.justcheckingin;
+package co.ajutor;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "JustCheckingIn";
+    return "Ajutor";
   }
 }

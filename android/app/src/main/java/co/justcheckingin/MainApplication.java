@@ -1,4 +1,4 @@
-package co.justcheckingin;
+package co.ajutor;
 
 import android.app.Application;
 import android.content.Context;
@@ -67,7 +67,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("co.justcheckingin.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("co.ajutor.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

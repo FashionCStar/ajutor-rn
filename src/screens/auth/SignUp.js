@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { TouchableOpacity } from 'react-native';
 import csc from 'country-state-city';
 import { ICountry, IState, ICity } from 'country-state-city';
 import PhoneInput from 'react-native-phone-number-input';
 import DropDownPicker from 'react-native-dropdown-picker';
 // import { Picker } from '@react-native-picker/picker';
-
-import { Button, Container, Content, Text, Item, Input, View, Label } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Button, Container, Content, Text, Item, Input, View, Label, Toast } from 'native-base';
 
 import { validateEmail } from '../../utils';
 import { signUp } from '../../actions/auth';
@@ -14,18 +15,22 @@ import { MIN_PASSWORD_LEN } from '../../config';
 
 class SignUp extends Component {
   state = {
-    email: '',
-    isValidEmail: true,
-    password: '',
-    isValidPwd: true,
-    phoneNumber: "",
-    country: "",
-    state: "",
-    city: "",
+    first_name: 'Aadil',
+    last_name: 'Achaa',
+    email: 'fashion7@gmail.com',
+    country: "United States",
+    state: "California",
+    city: "San Francisco",
+    phone: "123123124",
+    password: 'Qwert!2345*',
     isValidFirstName: true,
     isValidLastName: true,
+    isValidEmail: true,
     isValidCountry: true,
-    isValidCountry: true,
+    isValidState: true,
+    isValidCity: true,
+    isValidPhone: true,
+    isValidPwd: true,
     countryList: [],
     stateList: [],
     cityList: [],
@@ -34,6 +39,7 @@ class SignUp extends Component {
     isStateDisable: true,
     isCityOpen: false,
     isCityDisable: true,
+    showPwd: false,
   };
 
   componentDidMount() {
@@ -43,10 +49,31 @@ class SignUp extends Component {
     })
     this.setState({ countryList: countryList });
   }
+  onChangeFirstName = (first_name) => {
+    this.setState({
+      first_name,
+      isValidFirstName: true
+    });
+  }
+
+  onChangeLastName = (last_name) => {
+    this.setState({
+      last_name,
+      isValidLastName: true
+    });
+  }
+
   onChangeEmail = (email) => {
     this.setState({
       email,
       isValidEmail: true
+    });
+  }
+
+  onChangePhone = (phone) => {
+    this.setState({
+      phone,
+      isValidPhone: true
     });
   }
 
@@ -57,43 +84,77 @@ class SignUp extends Component {
     });
   }
 
+  onChangeConfirmPwd = (confirmPassword) => {
+    this.setState({
+      confirmPassword
+    })
+  }
+
   onChangeCountry = (value) => {
     let states = csc.getStatesOfCountry(value);
     let stateList = states.map(item => {
       return { label: item.name, value: item.isoCode };
     })
-    this.setState({ stateList: stateList, isStateDisable: false });
+    this.setState({ stateList: stateList, state: "", city: "", isStateDisable: false });
   }
 
   onChangeState = (country, state) => {
-    console.log('ddddddddd', country, state)
     let cities = csc.getCitiesOfState(country, state);
     let cityList = cities.map(item => {
       return { label: item.name, value: item.name };
     })
-    this.setState({ cityList: cityList, isCityDisable: false });
+    this.setState({ cityList: cityList, city: "", isCityDisable: false });
+  }
+
+  togglePwdShow = () => {
+    this.setState(prevState => ({
+      showPwd: !prevState.showPwd
+    }))
   }
 
   onSignUp = () => {
-    const { email, password } = this.state;
+    const { first_name, last_name, email, country, state, city, phone, password } = this.state;
+    const isValidFirstName = first_name ? true : false;
+    const isValidLastName = last_name ? true : false;
     const isValidEmail = validateEmail(email);
-    const isValidPwd = password.length >= MIN_PASSWORD_LEN;
-    this.setState({ isValidEmail, isValidPwd });
+    const isValidCountry = country ? true : false;
+    if (!isValidCountry) {
+      Toast.show({ text: "Please select your country correctly!", type: 'warning', duration: 3000 });
+      return;
+    }
+    const isValidState = state ? true: false;
+    if (!isValidState) {
+      Toast.show({ text: "Please select your state correctly!", type: 'warning', duration: 3000 });
+      return;
+    }
+    const isValidPhone = this.phoneRef?.isValidNumber(phone)
+    if (!isValidPhone) {
+      Toast.show({ text: "Please input valid phone number!", type: 'warning', duration: 3000 });
+      return;
+    }
+    // const isValidPwd = password.length >= MIN_PASSWORD_LEN;
+    this.setState({ isValidFirstName, isValidLastName, isValidEmail, isValidCountry, isValidState, isValidPhone });
 
-    if (!isValidEmail || !isValidPwd) return;
-
-    this.props.signUp({ email, password });
+    if (!isValidFirstName || !isValidLastName || !isValidEmail) return;
+    
+    try {
+      this.props.signUp({ email, phone, password, first_name, last_name, country, state, city });
+    } catch (error) {
+      console.log('sign up errorrrrr', error);
+    }
+    
+    // const { navigation } = this.props;
+    // navigation.navigate('SmsVerification');
   }
 
   onTerms = () => { }
 
   render() {
-    const { phoneNumber, isValidEmail, isValidPwd, isValidFirstName, isValidLastName, isValidCountry,
+    const { phone, isValidPwd, isValidFirstName, isValidLastName, isValidEmail, isValidCountry,
       isValidCity, country, state, city, countryList, stateList, cityList, isCountryOpen, isStateOpen, isCityOpen,
-      isStateDisable, isCityDisable
+      isStateDisable, isCityDisable, showPwd
     } = this.state;
 
-    // console.log('ddddddddddd', countryList)
     return (
       <Container>
         <Content padder>
@@ -134,7 +195,7 @@ class SignUp extends Component {
                 items={countryList}
                 value={country}
                 itemKey="value"
-                containerStyle={{ height: 40, borderBottomColor: '#00f' }}
+                containerStyle={{ height: 40 }}
                 textStyle={{ fontSize: 20 }}
                 style={{ borderRadius: 0, borderWidth: 0, borderBottomWidth: 1, borderBottomColor: '#cad4db' }}
                 setOpen={() => this.setState({ isCountryOpen: true })}
@@ -154,7 +215,7 @@ class SignUp extends Component {
                 items={stateList}
                 value={state}
                 itemKey="value"
-                containerStyle={{ height: 40, borderBottomColor: '#00f' }}
+                containerStyle={{ height: 40 }}
                 textStyle={{ fontSize: 20 }}
                 style={{ borderRadius: 0, borderWidth: 0, borderBottomWidth: 1, borderBottomColor: '#cad4db' }}
                 setOpen={() => this.setState({ isStateOpen: true })}
@@ -174,7 +235,7 @@ class SignUp extends Component {
                 items={cityList}
                 value={city}
                 itemKey="value"
-                containerStyle={{ height: 40, borderBottomColor: '#00f' }}
+                containerStyle={{ height: 40 }}
                 textStyle={{ fontSize: 20 }}
                 style={{ borderRadius: 0, borderWidth: 0, borderBottomWidth: 1, borderBottomColor: '#cad4db' }}
                 setOpen={() => this.setState({ isCityOpen: true })}
@@ -187,15 +248,14 @@ class SignUp extends Component {
               <Label style={{ color: '#7d8c96' }}>Phone</Label>
               <PhoneInput
                 placeholder=" "
-                ref={phoneInput => { this.phoneInput = phoneInput }}
-                defaultValue={phoneNumber}
+                ref={ref => { this.phoneRef = ref }}
+                defaultValue={phone}
                 defaultCode="FR"
                 layout="first"
                 onChangeText={(text) => {
-                  console.log('ssssssssss', text)
                 }}
                 onChangeFormattedText={(text) => {
-                  this.setState({ phoneNumber: text })
+                  this.onChangePhone(text);
                 }}
                 // autoFocus
                 containerStyle={{ backgroundColor: 'transparent', width: '100%' }}
@@ -203,7 +263,39 @@ class SignUp extends Component {
               />
             </View>
             <View style={{ marginTop: 20 }}>
-              <Button style={{ width: '100%', height: 60, justifyContent: 'center', backgroundColor: '#584fea' }}>
+              <Label style={{ color: '#7d8c96' }}>Password</Label>
+              <Item error={!isValidPwd} style={{ borderBottomColor: '#cad4db', borderBottomWidth: 1 }}>
+                <Input
+                  onChangeText={this.onChangePwd}
+                  secureTextEntry={!showPwd}
+                />
+                <TouchableOpacity transparent onPress={this.togglePwdShow}>
+                  {showPwd ?
+                    <Icon style={{ fontSize: 20 }} name="eye"></Icon>
+                    :
+                    <Icon style={{ fontSize: 20 }} name="eye-slash"></Icon>
+                  }
+                </TouchableOpacity>
+              </Item>
+            </View>
+            <View style={{ marginTop: 20 }}>
+              <Label style={{ color: '#7d8c96' }}>Confirm Password</Label>
+              <Item error={!isValidPwd} style={{ borderBottomColor: '#cad4db', borderBottomWidth: 1 }}>
+                <Input
+                  onChangeText={this.onChangeConfirmPwd}
+                  secureTextEntry={!showPwd}
+                />
+                <TouchableOpacity transparent onPress={this.togglePwdShow}>
+                  {showPwd ?
+                    <Icon style={{ fontSize: 20 }} name="eye"></Icon>
+                    :
+                    <Icon style={{ fontSize: 20 }} name="eye-slash"></Icon>
+                  }
+                </TouchableOpacity>
+              </Item>
+            </View>
+            <View style={{ marginTop: 20 }}>
+              <Button style={{ width: '100%', height: 60, justifyContent: 'center', backgroundColor: '#584fea' }} onPress={this.onSignUp}>
                 <Text style={{ fontSize: 20 }}>Sign Up</Text>
               </Button>
             </View>

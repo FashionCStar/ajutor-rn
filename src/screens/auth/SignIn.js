@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Container, Content, Text, Footer, Item, Input, Col, Row, View, Label, Separator } from 'native-base';
 import PhoneInput from "react-native-phone-number-input";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,13 +8,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 // import styles, { Material, screenSize } from '../../styles';
 import { Center } from '../../components';
 import { validateEmail } from '../../utils';
-import { signInWithEmail } from '../../actions/auth';
+import { signIn } from '../../actions/auth';
 import { MIN_PASSWORD_LEN } from '../../config';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
 
-class SignUp extends Component {
+class SignIn extends Component {
   state = {
     email: '',
     isValidPhone: true,
@@ -44,16 +43,24 @@ class SignUp extends Component {
     }))
   }
 
+  forgotPassword = () => {
+    console.log('dddddddddsssssssssssssss');
+    const { navigation } = this.props;
+    navigation.navigate('ForgotPassword');
+  }
   onSignIn = () => {
     const { phoneNumber, password } = this.state;
-    const isValidPhone = this.phoneRef?.isValidNumber(phoneNumber)
-    const isValidPwd = password.length >= MIN_PASSWORD_LEN;
-    this.setState({ isValidPhone, isValidPwd });
+    // const isValidPhone = this.phoneRef?.isValidNumber(phoneNumber)
+    // if (!isValidPhone) {
+    //   alert("Please input valid phone number");
+    //   return;
+    // }
+    // const isValidPwd = password.length >= MIN_PASSWORD_LEN;
+    // this.setState({ isValidPhone, isValidPwd });
 
-    if (!isValidPhone || !isValidPwd) return;
+    // if (!isValidPhone || !isValidPwd) return;
 
-    console.log('isVAlidddddddddd', isValidPhone)
-    // this.props.signInWithEmail({ phoneNumber, password });
+    this.props.signIn({ email: 'fashion7@gmail.com', password: 'Qwert!2345*' });
   }
 
   goToSignUp = () => {
@@ -63,7 +70,7 @@ class SignUp extends Component {
   onTerms = () => { }
 
   render() {
-    const { isValidEmail, isValidPwd, phoneNumber, showPwd } = this.state;
+    const { isValidPhone, isValidPwd, phoneNumber, showPwd } = this.state;
 
     return (
       <Container>
@@ -82,10 +89,8 @@ class SignUp extends Component {
                     defaultCode="FR"
                     layout="first"
                     onChangeText={(text) => {
-                      console.log('ssssssssss', text)
                     }}
                     onChangeFormattedText={(text) => {
-                      console.log('ddddddddddddd', text)
                       this.onChangePhone(text);
                     }}
                     // autoFocus
@@ -134,7 +139,7 @@ class SignUp extends Component {
                 >
                   <Text style={{ fontSize: 20 }}>REGISTER FOR FREE</Text>
                 </Button>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={this.forgotPassword}>
                   <Text style={{ marginTop: 20, color: '#aca8a2' }}>I don't remember my password</Text>
                 </TouchableOpacity>
               </Center>
@@ -173,7 +178,7 @@ function mapStateToProps({ auth }) {
 }
 
 const bindActions = {
-  signInWithEmail,
+  signIn,
 };
 
-export default connect(mapStateToProps, bindActions)(SignUp);
+export default connect(mapStateToProps, bindActions)(SignIn);

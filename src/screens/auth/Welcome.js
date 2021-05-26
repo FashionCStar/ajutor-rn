@@ -4,7 +4,7 @@ import { Button, Container, Content, Text, Icon } from 'native-base';
 import styles, { Material, screenSize } from '../../styles';
 import { Center } from '../../components';
 
-class Welcome extends Component {
+class SmsVerification extends Component {
   onGetStarted = () => {
     const {navigation} = this.props;
     navigation.replace('Intro');
@@ -27,4 +27,4 @@ class Welcome extends Component {
   }
 }
 
-export default Welcome;
+export default SmsVerification;

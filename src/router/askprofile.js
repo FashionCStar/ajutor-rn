@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import { AskPhoneNumber, AskUsername, AskVerifyCode } from '../screens/askprofile';
+import { AskPhoneNumber, AskUsername, AskVerifyCode, SmsVerification, ConfirmInfo } from '../screens/askprofile';
 import AskProHeader from './components/AskProHeader';
 import { Material } from '../styles';
 
@@ -15,9 +15,15 @@ const AskProfile = createStackNavigator({
   },
   AskVerifyCode: {
     screen: AskVerifyCode
-  }
+  },
+  SmsVerification: {
+    screen: SmsVerification
+  },
+  ConfirmInfo: {
+    screen: ConfirmInfo
+  },
 }, {
-  initialRouteName: 'AskUsername',
+  initialRouteName: 'SmsVerification',
   defaultNavigationOptions: {
     header: (props) => (<AskProHeader {...props} />),
     cardStyle: { backgroundColor: Material.containerBgColor }

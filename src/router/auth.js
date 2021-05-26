@@ -2,17 +2,17 @@ import React from 'react';
 // import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
-import { Intro, SignIn, SignUp, Welcome } from '../screens/auth';
+import { Intro, SignIn, SignUp, Welcome, ForgotPassword, ResetPassword } from '../screens/auth';
 import AuthHeader from './components/AuthHeader';
 import { Material } from '../styles';
 
 
 const Auth = createStackNavigator({
-  Welcome: {
-    screen: Welcome
+  ForgotPassword: {
+    screen: ForgotPassword
   },
-  Intro: {
-    screen: Intro
+  ResetPassword: {
+    screen: ResetPassword
   },
   SignUp: {
     screen: SignUp

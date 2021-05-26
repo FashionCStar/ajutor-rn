@@ -4,6 +4,7 @@ import { Body, Button, Header, Icon, Left, Right, Text } from "native-base";
 import { Material } from "../../styles";
 import { signOut } from '../../actions/auth';
 import { connect } from "react-redux";
+import { TouchableOpacity } from "react-native";
 
 class AskProHeader extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class AskProHeader extends Component {
         },
         {
           text: 'No',
-          onPress: () => {},
+          onPress: () => { },
           style: 'cancel'
         },
       ],
@@ -36,20 +37,24 @@ class AskProHeader extends Component {
   render() {
     const { navigation } = this.props;
     const { routeName } = navigation.state;
-    const isShowLeft = routeName == 'AskVerifyCode';
+    if (navigation.isFirstRouteInParent()) {
+      return (
+        <Header transparent iosBarStyle={Material.iosStatusbar} style={{ backgroundColor: '#252f3f' }}>
+        </Header>
+      );
+    }
 
     return (
-      <Header transparent iosBarStyle={Material.iosStatusbar}>
-        {isShowLeft ? <Left>
-          <Button transparent onPress={this.onBack}>
-            <Icon name='chevron-back' style={{ color: Material.brandPrimary }} />
-          </Button>
-        </Left> : null}
-        <Right>
-          <Button transparent onPress={this.onLogout} hasText>
-            <Text style={{ color: Material.brandPrimary }} uppercase={false}>Logout</Text>
-          </Button>
-        </Right>
+      <Header transparent iosBarStyle={Material.iosStatusbar} style={{ backgroundColor: '#252f3f' }}>
+        <TouchableOpacity transparent onPress={this.onBack} style={{ alignSelf: 'center' }}>
+          <Icon name='chevron-back' style={{ color: '#fff' }} />
+        </TouchableOpacity>
+        <Body style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 30, color: '#fff' }}>{navigation.state.routeName}</Text>
+        </Body>
+        <TouchableOpacity transparent>
+          <Icon name='chevron-back' style={{ color: 'transparent' }} />
+        </TouchableOpacity>
       </Header>
     );
   }

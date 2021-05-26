@@ -61,6 +61,25 @@ export function forgotPassword(params, callback) {
     }
   };
 }
+
+export function resetPassword(params, callback) {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: SHOW_PROGRESS });
+      const { email, email_code, newpassword } = params;
+      const { result } = await sendPostRequest('/auth/reset-password', { email, email_code, newpassword });
+      console.log('resultttttttt', result);
+      // Toast.show({ text: `Welcome to ${APP_NAME}`, type: 'success', duration: 2000, position: 'top' });
+      dispatch({ type: HIDE_PROGRESS });
+      // dispatch({ type: SET_TOKEN, payload: token });
+      callback();
+    } catch (error) {
+      console.log('Sign In error', error);
+      Toast.show({ text: error.message, type: 'warning', duration: 3000 });
+      return dispatch({ type: HIDE_PROGRESS });
+    }
+  };
+}
 // export function signUp(params) {
 //   return async (dispatch) => {
 //     try {

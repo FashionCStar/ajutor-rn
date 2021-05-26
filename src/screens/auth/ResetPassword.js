@@ -4,8 +4,10 @@ import { Center } from '../../components';
 import { TouchableOpacity } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { resetPassword } from '../../actions/auth';
+import { connect } from 'react-redux';
 
-const ResetPassword = ({ navigation }) => {
+const ResetPassword = ({ navigation, resetPassword }) => {
   const [isValidPwd, setIsValidPwd] = useState(true);
   const [showPwd, setShowPwd] = useState(false);
   const [password, setPassword] = useState("");
@@ -28,7 +30,9 @@ const ResetPassword = ({ navigation }) => {
   }
 
   const changePassword = () => {
-
+    resetPassword({ email: 'fashioncstar@gmail.com' }, () => {
+      navigation.navigate("ResetPassword")
+    });
   }
 
   return (
@@ -76,4 +80,15 @@ const ResetPassword = ({ navigation }) => {
   );
 }
 
-export default ResetPassword;
+function mapStateToProps({ auth, state }) {
+  return {
+    auth,
+    state
+  };
+}
+
+const bindActions = {
+  resetPassword,
+};
+
+export default connect(mapStateToProps, bindActions)(ResetPassword);

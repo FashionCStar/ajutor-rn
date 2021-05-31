@@ -43,9 +43,13 @@ class AppContainer extends Component {
 
   renderRoot() {
     const { userData } = this.props.auth;
-    if (isProfileCompleted(userData)) return (<Main />);
-    else if (userData) return (<AskProfile />);
+    if (isProfileCompleted(userData)) {
+      return (<Main />);
+    } else if (userData) {
+      return (<AskProfile />);
+    }
     return (<Auth />);
+    // return (<Main />);
   }
 
   render() {

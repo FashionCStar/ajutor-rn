@@ -30,7 +30,7 @@ const ResetPassword = ({ navigation, resetPassword }) => {
   }
 
   const changePassword = () => {
-    resetPassword({ email: 'fashioncstar@gmail.com' }, () => {
+    resetPassword({ email: 'fashioncstar@gmail.com', email_code: "", newPassword }, () => {
       navigation.navigate("ResetPassword")
     });
   }

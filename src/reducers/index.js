@@ -4,6 +4,7 @@ import {persistCombineReducers} from 'redux-persist';
 
 import auth from './auth';
 import state from './state';
+import main from './main';
 
 const persistConfig = {
   key: 'root',
@@ -14,5 +15,6 @@ const persistConfig = {
 
 export default persistCombineReducers(persistConfig, {
   auth,
-  state
+  state,
+  main
 });

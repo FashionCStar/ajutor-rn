@@ -6,3 +6,5 @@ export const SET_TOKEN = 'SET_TOKEN';
 export const SET_USERNAME = 'SET_USERNAME';
 export const SET_PHONENUMBER = 'SET_PHONENUMBER';
 export const AUTH_SIGNOUT = 'AUTH_SIGNOUT';
+
+export const SET_LANGUAGE = 'SET_LANGUAGE';
